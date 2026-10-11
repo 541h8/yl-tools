@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  yl-tools:
+    build: .
+    container_name: yl-tools
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    # 如需 HTTPS，取消下面注释并配置证书路径
+    # volumes:
+    #   - ./certs:/etc/nginx/certs:ro

@@ -1,0 +1,38 @@
+{
+  "name": "yl-tools",
+  "version": "1.0.0",
+  "description": "游龙工具集 - 基于游龙开源项目构建的纯前端网页工具箱，32个实用工具，完全离线运行",
+  "private": false,
+  "license": "MIT",
+  "keywords": [
+    "工具箱",
+    "toolkit",
+    "前端工具",
+    "广告拦截",
+    "网络安全",
+    "开发者工具",
+    "纯前端",
+    "offline"
+  ],
+  "author": {
+    "name": "游龙工具集",
+    "url": "https://github.com/你的用户名/你的仓库名"
+  },
+  "homepage": "https://你的用户名.github.io/你的仓库名/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/你的用户名/你的仓库名.git"
+  },
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve -l 3000 ."
+  },
+  "files": [
+    "index.html",
+    "style.css",
+    "engine.js",
+    "rules.js",
+    "README.md",
+    "LICENSE"
+  ]
+}
