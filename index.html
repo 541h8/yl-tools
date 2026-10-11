@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a0a0f">
+<title>游龙工具集 · 开源工具箱</title>
+<meta name="description" content="基于游龙开源项目构建的网页工具集：广告拦截引擎、安全护盾检测、容器沙箱模拟，外加20+实用工具">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐉</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="header">
+  <div class="brand">
+    <div class="logo">🐉</div>
+    <div>
+      <h1>游龙工具集</h1>
+    </div>
+    <span class="ver">v2.0</span>
+  </div>
+  <div class="search-box">
+    <span class="icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="搜索工具...">
+  </div>
+  <div class="theme-switcher">
+    <button class="theme-btn" id="themeBtn" onclick="toggleThemePanel()">🎨</button>
+    <div class="theme-panel" id="themePanel">
+      <div class="theme-opt active" data-th="dark" onclick="setTheme('dark')"><div class="dot" style="background:linear-gradient(135deg,#00f0ff,#8b5cf6)"></div>赛博</div>
+      <div class="theme-opt" data-th="light" onclick="setTheme('light')"><div class="dot" style="background:#e4e8f0"></div>浅色</div>
+      <div class="theme-opt" data-th="green" onclick="setTheme('green')"><div class="dot" style="background:linear-gradient(135deg,#00e5a0,#26d07c)"></div>翠绿</div>
+      <div class="theme-opt" data-th="sunset" onclick="setTheme('sunset')"><div class="dot" style="background:linear-gradient(135deg,#ff9a56,#e056a0)"></div>日落</div>
+      <div class="theme-opt" data-th="mono" onclick="setTheme('mono')"><div class="dot" style="background:#fff"></div>极简</div>
+      <div class="theme-opt" data-th="ocean" onclick="setTheme('ocean')"><div class="dot" style="background:linear-gradient(135deg,#4fc3f7,#7986cb)"></div>深海</div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="stats-bar">
+    <div class="stat-chip"><span class="stat-num-sm" id="statTools">0</span><span>个工具</span></div>
+    <div class="stat-chip"><span class="stat-num-sm" id="statRules">0</span><span>条拦截规则</span></div>
+    <div class="stat-chip"><span class="stat-num-sm">100%</span><span>本地运行</span></div>
+    <div class="stat-chip"><span class="stat-num-sm">0</span><span>数据上传</span></div>
+  </div>
+  <div class="categories" id="categories"></div>
+  <div class="cards" id="cards"></div>
+</main>
+
+<footer class="footer">
+  <p>🐉 游龙工具集 · 纯前端实现 · 数据不上传 · 隐私安全</p>
+  <p>广告拦截引擎基于游龙开源规则库 | 安全检测参考游龙安全护盾 | 容器模拟参考游龙容器插件</p>
+  <p>工具集共 32 个工具 · 213,682 条广告拦截规则 · 完全离线运行</p>
+</footer>
+
+<div class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆️</div>
+
+<!-- 工具面板 -->
+<div class="overlay" id="overlay">
+  <div class="panel">
+    <div class="panel-head">
+      <div class="pi" id="panelIcon">🐉</div>
+      <div>
+        <h3 id="panelTitle">工具</h3>
+        <p id="panelDesc"></p>
+      </div>
+      <button class="close" onclick="closePanel()">×</button>
+    </div>
+    <div class="panel-body" id="panelBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- 引擎（不依赖规则库，先加载先渲染） -->
+<script src="engine.js"></script>
+<!-- 规则库（体积大，异步加载，不阻塞页面渲染） -->
+<script>
+  var s=document.createElement('script');
+  s.src='rules.js';
+  s.async=true;
+  var _loaded=false;
+  s.onload=function(){
+    _loaded=true;
+    if(window.BLOCKER && window.__YL_RULES__){
+      window.BLOCKER.reload && window.BLOCKER.reload();
+      var rc=window.__YL_RULES__.length;
+      var el=document.getElementById('statRules');
+      if(el)el.textContent=rc?rc.toLocaleString():0;
+    }
+  };
+  s.onerror=function(){ console.warn('[游龙] rules.js 加载失败'); };
+  document.head.appendChild(s);
+  // 超时兜底：10秒后仍未加载到规则库则给出提示
+  setTimeout(function(){
+    if(!_loaded || !(window.__YL_RULES__ && window.__YL_RULES__.length)){
+      var el=document.getElementById('statRules');
+      if(el)el.textContent='加载中…';
+    }
+  },10000);
+</script>
+</body>
+</html>
